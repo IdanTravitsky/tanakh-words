@@ -18,11 +18,30 @@
 <body>
     <div class="container">
         <div class="top-bar">
-            <button id="dark-toggle" class="icon-btn" title="מצב כהה/בהיר" aria-label="החלף מצב כהה/בהיר">
-                <span class="icon-sun">&#9788;</span>
-                <span class="icon-moon">&#9790;</span>
+            <div class="top-bar-group">
+                <button id="dark-toggle" class="icon-btn" title="מצב כהה/בהיר" aria-label="החלף מצב כהה/בהיר">
+                    <span class="icon-sun">&#9788;</span>
+                    <span class="icon-moon">&#9790;</span>
+                </button>
+                <button id="faq-toggle" class="icon-btn" title="איך זה עובד?" aria-label="איך זה עובד?">?</button>
+            </div>
+            <button id="share-btn" class="icon-btn" title="העתקת קישור" aria-label="העתקת קישור">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
             </button>
-            <button id="share-btn" class="icon-btn" title="שתפו קישור" aria-label="העתק קישור לשיתוף">&#8599;</button>
+        </div>
+
+        <div id="faq-panel" class="faq-panel hidden">
+            <h2>איך זה עובד?</h2>
+            <p>האתר בודק כל מילה בטקסט שהקלדתם מול מאגר של כל המילים שמופיעות בתנ״ך (ואם סימנתם, גם במשנה).</p>
+            <h3>מה הצבעים?</h3>
+            <p>מילה ירוקה נמצאה במקורות. הפס הצבעוני מעל כל מילה מראה את המקור הקדום ביותר שבו היא מופיעה: זהב = תורה, כחול = נביאים, סגול = כתובים, טורקיז = משנה. מילה אדומה לא נמצאה.</p>
+            <h3>התאמת כתיב</h3>
+            <p>עברית מודרנית כותבת מילים עם יותר אותיות ו/י מאשר התנ״ך (למשל ״שואל״ מול ״שאל״). כשהאפשרות דלוקה, האתר מנסה להתאים גם צורות כתיב שונות. כשהיא כבויה, רק התאמה מדויקת.</p>
+            <h3>ר״ת</h3>
+            <p>האתר מזהה ראשי תיבות נפוצים כמו בע״פ (בעל פה), צה״ל (צבא הגנה לישראל) ועוד, ובודק את המילים המלאות שלהם.</p>
+            <h3>מגבלות</h3>
+            <p>הבדיקה מבוססת על רצף אותיות, לא על משמעות או שורש דקדוקי. לכן לפעמים מילים מודרניות נמצאות בטעות (למשל ״מחשב״ קיים בתנ״ך אבל לא במובן של מחשב), ולפעמים שמות או מילים לועזיות לא נמצאות למרות שנשמעות עברית.</p>
+            <button id="faq-close" class="action-btn">סגור</button>
         </div>
 
         <header>

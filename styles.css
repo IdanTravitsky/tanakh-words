@@ -142,6 +142,47 @@ body {
 body.dark .icon-sun { display: none; }
 body.dark .icon-moon { display: inline; }
 
+/* ===== Top bar groups ===== */
+.top-bar-group {
+    display: flex;
+    gap: 0.4rem;
+}
+
+/* ===== FAQ panel ===== */
+.faq-panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow);
+    line-height: 1.7;
+    font-size: 0.95rem;
+    color: var(--text);
+}
+
+.faq-panel h2 {
+    font-size: 1.3rem;
+    margin-bottom: 0.8rem;
+    color: var(--text);
+}
+
+.faq-panel h3 {
+    font-size: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 0.3rem;
+    color: var(--text);
+}
+
+.faq-panel p {
+    color: var(--text-secondary);
+    margin-bottom: 0.4rem;
+}
+
+.faq-panel .action-btn {
+    margin-top: 1rem;
+}
+
 /* ===== Header ===== */
 header {
     text-align: center;

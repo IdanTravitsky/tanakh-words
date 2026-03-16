@@ -20,6 +20,9 @@ document.addEventListener('DOMContentLoaded', function () {
     var toast = document.getElementById('toast');
     var legend = document.getElementById('legend');
     var loading = document.getElementById('loading');
+    var faqToggle = document.getElementById('faq-toggle');
+    var faqPanel = document.getElementById('faq-panel');
+    var faqClose = document.getElementById('faq-close');
 
     var debounceTimer;
     var toastTimer;
@@ -208,6 +211,13 @@ document.addEventListener('DOMContentLoaded', function () {
     filterKetuvim.addEventListener('change', handleFilterChange);
     filterMishnah.addEventListener('change', handleFilterChange);
     filterKtiv.addEventListener('change', processText);
+
+    faqToggle.addEventListener('click', function () {
+        faqPanel.classList.toggle('hidden');
+    });
+    faqClose.addEventListener('click', function () {
+        faqPanel.classList.add('hidden');
+    });
 
     darkToggle.addEventListener('click', function () {
         document.body.classList.toggle('dark');
