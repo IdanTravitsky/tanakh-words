@@ -66,14 +66,6 @@ document.addEventListener('DOMContentLoaded', function () {
      '\u05D3\u05D1\u05E8\u05D9 \u05D4\u05D9\u05DE\u05D9\u05DD \u05D1\u05F3'
     ].forEach(function(b) { BOOK_SECTION[b] = '\u05DB\u05EA\u05D5\u05D1\u05D9\u05DD'; });
 
-    // Section bit -> source CSS class and display name
-    var SOURCE_INFO = {
-        1: { cls: 'src-torah', name: '\u05EA\u05D5\u05E8\u05D4' },
-        2: { cls: 'src-neviim', name: '\u05E0\u05D1\u05D9\u05D0\u05D9\u05DD' },
-        4: { cls: 'src-ketuvim', name: '\u05DB\u05EA\u05D5\u05D1\u05D9\u05DD' },
-        8: { cls: 'src-mishnah', name: '\u05DE\u05E9\u05E0\u05D4' }
-    };
-
     // Hebrew acronyms (ראשי תיבות)
     var ACRONYMS = {
         "\u05EA\u05E0\u05DA":"\u05EA\u05D5\u05E8\u05D4 \u05E0\u05D1\u05D9\u05D0\u05D9\u05DD \u05DB\u05EA\u05D5\u05D1\u05D9\u05DD",
@@ -289,15 +281,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if ((sectionMask & 4) && entry[2] >= 0) return entry[2];
         if ((sectionMask & 8) && entry[3] >= 0) return entry[3];
         return -1;
-    }
-
-    // Determine which section a word first appears in (for color coding)
-    function getSourceBit(entry) {
-        if (entry[0] >= 0) return 1;
-        if (entry[1] >= 0) return 2;
-        if (entry[2] >= 0) return 4;
-        if (entry[3] >= 0) return 8;
-        return 0;
     }
 
     function tryMatch(word, sectionMask) {
