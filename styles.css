@@ -34,7 +34,7 @@
     --link: #7a6248;
 }
 
-body.dark {
+.dark {
     --bg: #141821;
     --bg-pattern: radial-gradient(circle at 20% 80%, rgba(90, 122, 154, 0.04) 0%, transparent 50%),
                   radial-gradient(circle at 80% 20%, rgba(90, 122, 154, 0.04) 0%, transparent 50%);
@@ -139,8 +139,8 @@ body {
 }
 
 .icon-moon { display: none; }
-body.dark .icon-sun { display: none; }
-body.dark .icon-moon { display: inline; }
+.dark .icon-sun { display: none; }
+.dark .icon-moon { display: inline; }
 
 /* ===== Top bar groups ===== */
 .top-bar-group {

@@ -163,8 +163,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 15000);
     }
 
+    // Dark mode already applied on <html> by inline script in <head>
+    // Sync to body as well for any body-scoped styles
     if (localStorage.getItem('darkMode') === '1') {
-        document.body.classList.add('dark');
+        document.documentElement.classList.add('dark');
     }
 
     if (window.location.hash.length > 1) {
@@ -226,8 +228,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     darkToggle.addEventListener('click', function () {
-        document.body.classList.toggle('dark');
-        localStorage.setItem('darkMode', document.body.classList.contains('dark') ? '1' : '0');
+        document.documentElement.classList.toggle('dark');
+        localStorage.setItem('darkMode', document.documentElement.classList.contains('dark') ? '1' : '0');
     });
 
     shareBtn.addEventListener('click', function () {
