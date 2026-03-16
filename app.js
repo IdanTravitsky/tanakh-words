@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var legend = document.getElementById('legend');
     var loading = document.getElementById('loading');
     var faqToggle = document.getElementById('faq-toggle');
-    var faqPanel = document.getElementById('faq-panel');
+    var faqOverlay = document.getElementById('faq-overlay');
     var faqClose = document.getElementById('faq-close');
 
     var debounceTimer;
@@ -213,10 +213,16 @@ document.addEventListener('DOMContentLoaded', function () {
     filterKtiv.addEventListener('change', processText);
 
     faqToggle.addEventListener('click', function () {
-        faqPanel.classList.toggle('hidden');
+        faqOverlay.classList.remove('hidden');
+        requestAnimationFrame(function () { faqOverlay.classList.add('show'); });
     });
-    faqClose.addEventListener('click', function () {
-        faqPanel.classList.add('hidden');
+    function closeFaq() {
+        faqOverlay.classList.remove('show');
+        setTimeout(function () { faqOverlay.classList.add('hidden'); }, 250);
+    }
+    faqClose.addEventListener('click', closeFaq);
+    faqOverlay.addEventListener('click', function (e) {
+        if (e.target === faqOverlay) closeFaq();
     });
 
     darkToggle.addEventListener('click', function () {
