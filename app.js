@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var toastTimer;
 
     // Hebrew word regex (letters + nikkud/cantillation)
-    var hebrewWordRe = /([\u05D0-\u05EA][\u0591-\u05BD\u05BF-\u05C2\u05C4-\u05C7\u05D0-\u05EA]*)/;
+    var hebrewWordRe = /([\u05D0-\u05EA][\u0591-\u05BD\u05BF-\u05C2\u05C4-\u05C7\u05D0-\u05EA\u05F3\u05F4"']*)/;
 
     // Hebrew prefixes, longest first for greedy matching
     var PREFIXES = [
