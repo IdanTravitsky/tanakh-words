@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build Tanakh word dictionary from Sefaria API."""
+"""Build Tanakh + Mishnah word dictionary from Sefaria API."""
 
 import json
 import os
@@ -9,13 +9,15 @@ import time
 import urllib.request
 import urllib.parse
 
-# (API name, Hebrew name, section_bit: 1=Torah, 2=Nevi'im, 4=Ketuvim)
+# (API name, Hebrew name, section_bit: 1=Torah, 2=Nevi'im, 4=Ketuvim, 8=Mishnah)
 BOOKS = [
+    # Torah
     ("Genesis", "בראשית", 1),
     ("Exodus", "שמות", 1),
     ("Leviticus", "ויקרא", 1),
     ("Numbers", "במדבר", 1),
     ("Deuteronomy", "דברים", 1),
+    # Nevi'im
     ("Joshua", "יהושע", 2),
     ("Judges", "שופטים", 2),
     ("I Samuel", "שמואל א׳", 2),
@@ -37,6 +39,7 @@ BOOKS = [
     ("Haggai", "חגי", 2),
     ("Zechariah", "זכריה", 2),
     ("Malachi", "מלאכי", 2),
+    # Ketuvim
     ("Psalms", "תהלים", 4),
     ("Proverbs", "משלי", 4),
     ("Job", "איוב", 4),
@@ -50,6 +53,75 @@ BOOKS = [
     ("Nehemiah", "נחמיה", 4),
     ("I Chronicles", "דברי הימים א׳", 4),
     ("II Chronicles", "דברי הימים ב׳", 4),
+    # Mishnah - Zeraim
+    ("Mishnah Berakhot", "משנה ברכות", 8),
+    ("Mishnah Peah", "משנה פאה", 8),
+    ("Mishnah Demai", "משנה דמאי", 8),
+    ("Mishnah Kilayim", "משנה כלאיים", 8),
+    ("Mishnah Sheviit", "משנה שביעית", 8),
+    ("Mishnah Terumot", "משנה תרומות", 8),
+    ("Mishnah Maasrot", "משנה מעשרות", 8),
+    ("Mishnah Maaser Sheni", "משנה מעשר שני", 8),
+    ("Mishnah Challah", "משנה חלה", 8),
+    ("Mishnah Orlah", "משנה ערלה", 8),
+    ("Mishnah Bikkurim", "משנה ביכורים", 8),
+    # Mishnah - Moed
+    ("Mishnah Shabbat", "משנה שבת", 8),
+    ("Mishnah Eruvin", "משנה עירובין", 8),
+    ("Mishnah Pesachim", "משנה פסחים", 8),
+    ("Mishnah Shekalim", "משנה שקלים", 8),
+    ("Mishnah Yoma", "משנה יומא", 8),
+    ("Mishnah Sukkah", "משנה סוכה", 8),
+    ("Mishnah Beitzah", "משנה ביצה", 8),
+    ("Mishnah Rosh Hashanah", "משנה ראש השנה", 8),
+    ("Mishnah Taanit", "משנה תענית", 8),
+    ("Mishnah Megillah", "משנה מגילה", 8),
+    ("Mishnah Moed Katan", "משנה מועד קטן", 8),
+    ("Mishnah Chagigah", "משנה חגיגה", 8),
+    # Mishnah - Nashim
+    ("Mishnah Yevamot", "משנה יבמות", 8),
+    ("Mishnah Ketubot", "משנה כתובות", 8),
+    ("Mishnah Nedarim", "משנה נדרים", 8),
+    ("Mishnah Nazir", "משנה נזיר", 8),
+    ("Mishnah Sotah", "משנה סוטה", 8),
+    ("Mishnah Gittin", "משנה גיטין", 8),
+    ("Mishnah Kiddushin", "משנה קידושין", 8),
+    # Mishnah - Nezikin
+    ("Mishnah Bava Kamma", "משנה בבא קמא", 8),
+    ("Mishnah Bava Metzia", "משנה בבא מציעא", 8),
+    ("Mishnah Bava Batra", "משנה בבא בתרא", 8),
+    ("Mishnah Sanhedrin", "משנה סנהדרין", 8),
+    ("Mishnah Makkot", "משנה מכות", 8),
+    ("Mishnah Shevuot", "משנה שבועות", 8),
+    ("Mishnah Eduyot", "משנה עדויות", 8),
+    ("Mishnah Avodah Zarah", "משנה עבודה זרה", 8),
+    ("Pirkei Avot", "משנה אבות", 8),
+    ("Mishnah Horayot", "משנה הוריות", 8),
+    # Mishnah - Kodashim
+    ("Mishnah Zevachim", "משנה זבחים", 8),
+    ("Mishnah Menachot", "משנה מנחות", 8),
+    ("Mishnah Chullin", "משנה חולין", 8),
+    ("Mishnah Bekhorot", "משנה בכורות", 8),
+    ("Mishnah Arakhin", "משנה ערכין", 8),
+    ("Mishnah Temurah", "משנה תמורה", 8),
+    ("Mishnah Keritot", "משנה כריתות", 8),
+    ("Mishnah Meilah", "משנה מעילה", 8),
+    ("Mishnah Tamid", "משנה תמיד", 8),
+    ("Mishnah Middot", "משנה מידות", 8),
+    ("Mishnah Kinnim", "משנה קינים", 8),
+    # Mishnah - Tahorot
+    ("Mishnah Kelim", "משנה כלים", 8),
+    ("Mishnah Oholot", "משנה אהלות", 8),
+    ("Mishnah Negaim", "משנה נגעים", 8),
+    ("Mishnah Parah", "משנה פרה", 8),
+    ("Mishnah Tahorot", "משנה טהרות", 8),
+    ("Mishnah Mikvaot", "משנה מקוואות", 8),
+    ("Mishnah Niddah", "משנה נידה", 8),
+    ("Mishnah Makhshirin", "משנה מכשירין", 8),
+    ("Mishnah Zavim", "משנה זבים", 8),
+    ("Mishnah Tevul Yom", "משנה טבול יום", 8),
+    ("Mishnah Yadayim", "משנה ידיים", 8),
+    ("Mishnah Oktzin", "משנה עוקצין", 8),
 ]
 
 CACHE_DIR = "cache"
@@ -122,17 +194,16 @@ def process_book(data, he_name):
 
 
 def main():
-    word_freq = {}       # stripped -> count
-    word_sections = {}   # stripped -> bitmask
+    word_freq = {}
+    word_sections = {}
     # First occurrence per section: section_bit -> {stripped -> verse_index}
-    word_first = {1: {}, 2: {}, 4: {}}
+    word_first = {1: {}, 2: {}, 4: {}, 8: {}}
     text_array = []
     verse_index_map = {}
 
     total_verses = 0
 
     def ensure_verse(ref, verse_text):
-        """Add verse to text_array if not already there, return its index."""
         if ref not in verse_index_map:
             idx = len(text_array)
             text_array.append(f"{ref}\t{verse_text}")
@@ -159,20 +230,18 @@ def main():
                     word_freq[stripped] = word_freq.get(stripped, 0) + 1
                     word_sections[stripped] = word_sections.get(stripped, 0) | section_bit
 
-                    # Track first occurrence in this section
                     if stripped not in word_first[section_bit]:
                         verse_idx = ensure_verse(ref, verse_text)
                         word_first[section_bit][stripped] = verse_idx
                         new_words += 1
 
             print(f"{len(verses)} verses, {new_words} new words")
-            time.sleep(0.1)
+            time.sleep(0.5)
 
         except Exception as e:
             print(f"ERROR: {e}")
             time.sleep(2)
 
-    # Collect all unique words across all sections
     all_words = set()
     for section_words in word_first.values():
         all_words.update(section_words.keys())
@@ -182,24 +251,24 @@ def main():
     print(f"Unique words: {len(all_words)}")
     print(f"Verses referenced: {len(text_array)}")
 
-    # Format: word -> [torah_idx, neviim_idx, ketuvim_idx, frequency, sections_bitmask]
-    # -1 means word does not appear in that section
+    # Format: word -> [torah_idx, neviim_idx, ketuvim_idx, mishnah_idx, frequency, sections_bitmask]
     combined = {}
     for word in all_words:
         combined[word] = [
             word_first[1].get(word, -1),
             word_first[2].get(word, -1),
             word_first[4].get(word, -1),
+            word_first[8].get(word, -1),
             word_freq.get(word, 1),
             word_sections.get(word, 0)
         ]
 
     output_file = "tanakh_data.js"
     with open(output_file, "w", encoding="utf-8") as f:
-        f.write("// Tanakh word dictionary - auto-generated from Sefaria\n")
+        f.write("// Tanakh + Mishnah word dictionary - auto-generated from Sefaria\n")
         f.write(f"// {len(combined)} unique words from {total_verses} verses\n")
-        f.write("// Format: word -> [torah_verse_idx, neviim_verse_idx, ketuvim_verse_idx, frequency, sections_bitmask]\n")
-        f.write("// Verse idx -1 = not found in that section. Sections bitmask: 1=Torah, 2=Nevi'im, 4=Ketuvim\n\n")
+        f.write("// Format: word -> [torah_idx, neviim_idx, ketuvim_idx, mishnah_idx, freq, sections_mask]\n")
+        f.write("// Sections: 1=Torah, 2=Nevi'im, 4=Ketuvim, 8=Mishnah\n\n")
         f.write("const TANAKH_dict = ")
         f.write(json.dumps(combined, ensure_ascii=False, separators=(',', ':')))
         f.write(";\n\nconst TANAKH_text = ")

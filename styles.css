@@ -509,17 +509,35 @@ textarea::placeholder {
     display: inline-block;
 }
 
-.found-dot {
-    background: var(--green);
+/* Source-specific colors */
+.dot-torah { background: #b8860b; }
+.dot-neviim { background: #4682b4; }
+.dot-ketuvim { background: #8b5fa0; }
+.dot-mishnah { background: #2a9d8f; }
+.notfound-dot { background: var(--red); }
+
+.source-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-inline-end: 2px;
 }
 
-.prefix-dot {
-    background: var(--prefix-color);
-    border-bottom: 2px dashed var(--prefix-color);
+/* Word source indicator — thin left border */
+.word-found.src-torah, .word-prefix.src-torah { border-right: 3px solid #b8860b; }
+.word-found.src-neviim, .word-prefix.src-neviim { border-right: 3px solid #4682b4; }
+.word-found.src-ketuvim, .word-prefix.src-ketuvim { border-right: 3px solid #8b5fa0; }
+.word-found.src-mishnah, .word-prefix.src-mishnah { border-right: 3px solid #2a9d8f; }
+
+.filters-secondary {
+    margin-top: -0.6rem;
+    margin-bottom: 1.2rem;
 }
 
-.notfound-dot {
-    background: var(--red);
+.filters-secondary .filter-cb {
+    font-size: 0.82rem;
+    color: var(--text-muted);
 }
 
 /* ===== Footer ===== */

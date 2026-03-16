@@ -5,17 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>המילים האלה בתנ״ך?</title>
     <meta name="google-site-verification" content="MvOEP2FJo7BAT9N9c6e-vM42udflzmUTvAQEDkh4vrY" />
-    <meta name="description" content="בדקו אילו מילים מהטקסט שלכם מופיעות בתנ״ך - כלי חינמי לבדיקת אוצר מילים תנ״כי">
+    <meta name="description" content="בדקו אילו מילים מהטקסט שלכם מופיעות בתנ״ך ובמשנה - כלי חינמי לבדיקת אוצר מילים">
     <meta name="theme-color" content="#f5f0e8">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x1F4D6;</text></svg>">
-
-    <!-- Open Graph / Social sharing -->
     <meta property="og:title" content="המילים האלה בתנ״ך?">
-    <meta property="og:description" content="הקלידו טקסט בעברית ובדקו אילו מילים מופיעות בתנ״ך">
+    <meta property="og:description" content="הקלידו טקסט בעברית ובדקו אילו מילים מופיעות בתנ״ך ובמשנה">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="he_IL">
     <meta name="twitter:card" content="summary">
-
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -30,14 +27,19 @@
 
         <header>
             <h1>המילים האלה בתנ״ך?</h1>
-            <p class="subtitle">הקלידו טקסט בעברית ובדקו אילו מילים מופיעות בתנ״ך</p>
+            <p class="subtitle">הקלידו טקסט בעברית ובדקו אילו מילים מופיעות בתנ״ך ובמשנה</p>
         </header>
 
         <div class="filters">
-            <span class="filter-label">סינון לפי חלק:</span>
-            <label class="filter-cb"><input type="checkbox" id="filter-torah" checked> תורה</label>
-            <label class="filter-cb"><input type="checkbox" id="filter-neviim" checked> נביאים</label>
-            <label class="filter-cb"><input type="checkbox" id="filter-ketuvim" checked> כתובים</label>
+            <span class="filter-label">מקורות:</span>
+            <label class="filter-cb"><input type="checkbox" id="filter-torah" checked><span class="source-dot dot-torah"></span>תורה</label>
+            <label class="filter-cb"><input type="checkbox" id="filter-neviim" checked><span class="source-dot dot-neviim"></span>נביאים</label>
+            <label class="filter-cb"><input type="checkbox" id="filter-ketuvim" checked><span class="source-dot dot-ketuvim"></span>כתובים</label>
+            <label class="filter-cb"><input type="checkbox" id="filter-mishnah"><span class="source-dot dot-mishnah"></span>משנה</label>
+        </div>
+
+        <div class="filters filters-secondary">
+            <label class="filter-cb"><input type="checkbox" id="filter-ktiv" checked> התאמת כתיב (מלא/חסר)</label>
         </div>
 
         <main>
@@ -49,7 +51,7 @@
                 <button id="clear-btn" class="action-btn">נקה</button>
             </div>
 
-            <div id="loading" class="loading">טוען נתוני תנ״ך...</div>
+            <div id="loading" class="loading">טוען נתונים...</div>
 
             <div id="stats" class="stats hidden" aria-live="polite">
                 <div class="stat-main">
@@ -59,22 +61,24 @@
                     <div id="progress-fill" class="progress-fill"></div>
                 </div>
                 <div class="stat-detail">
-                    <span id="found-count">0</span> מתוך <span id="total-count">0</span> מילים נמצאו בתנ״ך
+                    <span id="found-count">0</span> מתוך <span id="total-count">0</span> מילים נמצאו
                 </div>
             </div>
 
             <div id="results" class="results"></div>
 
             <div id="legend" class="legend hidden">
-                <span class="legend-item"><span class="dot found-dot"></span>נמצא בתנ״ך</span>
-                <span class="legend-item"><span class="dot prefix-dot"></span>נמצא (תחילית)</span>
+                <span class="legend-item"><span class="dot dot-torah"></span>תורה</span>
+                <span class="legend-item"><span class="dot dot-neviim"></span>נביאים</span>
+                <span class="legend-item"><span class="dot dot-ketuvim"></span>כתובים</span>
+                <span class="legend-item"><span class="dot dot-mishnah"></span>משנה</span>
                 <span class="legend-item"><span class="dot notfound-dot"></span>לא נמצא</span>
             </div>
         </main>
 
         <footer>
             <div class="footer-data">
-                נוסח התנ״ך מ-<a href="https://www.sefaria.org" target="_blank" rel="noopener">ספריא</a>
+                נוסח התנ״ך והמשנה מ-<a href="https://www.sefaria.org" target="_blank" rel="noopener">ספריא</a>
             </div>
             <div class="footer-credit">
                 <span class="made-by">made by</span>
@@ -89,9 +93,7 @@
     <div id="toast" class="toast" role="status" aria-live="assertive"></div>
 
     <noscript>
-        <p style="text-align:center; padding:2rem; font-size:1.2rem; color:#6b5b4f;">
-            אתר זה דורש JavaScript כדי לפעול.
-        </p>
+        <p style="text-align:center; padding:2rem; font-size:1.2rem; color:#6b5b4f;">אתר זה דורש JavaScript כדי לפעול.</p>
     </noscript>
 
     <script src="tanakh_data.js"></script>
