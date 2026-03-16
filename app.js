@@ -461,31 +461,49 @@ document.addEventListener('DOMContentLoaded', function () {
                 hasHebrew = true;
                 totalWords++;
 
-                // Check acronym first
-                var acronymMatch = lookupAcronym(token);
-                if (acronymMatch) {
-                    foundWords++;
-                    var aEntry = acronymMatch.entry;
-                    var aVerseData = TANAKH_text[acronymMatch.verseIdx];
-                    var aTabPos = aVerseData.indexOf('\t');
-                    var aRef = aVerseData.substring(0, aTabPos);
-                    var aVerseText = cleanVerseText(aVerseData.substring(aTabPos + 1));
-                    var aBookName = getBookFromRef(aRef);
-                    var aSection = getSectionOfBook(aBookName);
-                    var aSrcCls = getSourceClass(aEntry, sectionMask);
+                // Check acronym — if found, expand inline and process each word
+                var acronymExpansion = lookupAcronym(token);
+                if (acronymExpansion) {
+                    // Replace the acronym token with its expanded words
+                    // Adjust word count: subtract 1 (the acronym) and let each expanded word count individually
+                    totalWords--;
+                    var expWords = acronymExpansion.expansion.split(' ');
+                    for (var ew = 0; ew < expWords.length; ew++) {
+                        if (ew > 0) htmlParts.push(' ');
+                        totalWords++;
+                        var expStripped = stripNikkud(expWords[ew]);
+                        var expMatch = lookupWord(expStripped);
+                        if (expMatch) {
+                            foundWords++;
+                            var expEntry = expMatch.entry;
+                            var expVerseData = TANAKH_text[expMatch.verseIdx];
+                            var expTabPos = expVerseData.indexOf('\t');
+                            var expRef = expVerseData.substring(0, expTabPos);
+                            var expVerseText = cleanVerseText(expVerseData.substring(expTabPos + 1));
+                            var expBookName = getBookFromRef(expRef);
+                            var expSection = getSectionOfBook(expBookName);
+                            var expFreq = expEntry[4];
+                            var expSrcCls = getSourceClass(expEntry, sectionMask);
+                            var expHighlighted = highlightWordInVerse(expVerseText, expMatch.root);
+                            var expCssClass = (expMatch.prefix ? 'word-prefix' : 'word-found') + ' ' + expSrcCls;
 
-                    htmlParts.push(
-                        '<span class="word-found ' + aSrcCls + '">' +
-                        escapeHtml(token) +
-                        '<span class="tooltip">' +
-                        '<span class="prefix-note">\u05E8\u05F4\u05EA: ' + escapeHtml(acronymMatch.expansion) + '</span>' +
-                        '<span class="source-label">\u05DE\u05E7\u05D5\u05E8</span>' +
-                        '<span class="source-section">' + escapeHtml(aSection) + ' \u00B7 ' + escapeHtml(aBookName) + '</span>' +
-                        '<span class="ref">' + escapeHtml(aRef) + '</span>' +
-                        '<hr class="divider">' +
-                        '<span class="verse-text">' + highlightWordInVerse(aVerseText, acronymMatch.root) + '</span>' +
-                        '</span></span>'
-                    );
+                            var expTooltip =
+                                '<span class="tooltip">' +
+                                (ew === 0 ? '<span class="prefix-note">\u05E8\u05F4\u05EA: ' + escapeHtml(token) + ' = ' + escapeHtml(acronymExpansion.expansion) + '</span>' : '') +
+                                '<span class="source-label">\u05DE\u05E7\u05D5\u05E8</span>' +
+                                '<span class="source-section">' + escapeHtml(expSection) + ' \u00B7 ' + escapeHtml(expBookName) + '</span>' +
+                                '<span class="ref">' + escapeHtml(expRef) + '</span>' +
+                                '<a class="freq" href="https://www.sefaria.org/search?q=' + encodeURIComponent(expMatch.root) +
+                                '&tab=text&tvar=1&tsort=relevance" target="_blank" rel="noopener">' +
+                                escapeHtml(formatFreq(expFreq)) + ' \u203A</a>' +
+                                '<hr class="divider">' +
+                                '<span class="verse-text">' + expHighlighted + '</span></span>';
+
+                            htmlParts.push('<span class="' + expCssClass + '">' + escapeHtml(expWords[ew]) + expTooltip + '</span>');
+                        } else {
+                            htmlParts.push('<span class="word-notfound">' + escapeHtml(expWords[ew]) + '</span>');
+                        }
+                    }
                     continue;
                 }
 
