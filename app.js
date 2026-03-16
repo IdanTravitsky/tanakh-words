@@ -419,6 +419,38 @@ document.addEventListener('DOMContentLoaded', function () {
         return { expansion: expansion, entry: firstMatch.entry, root: firstMatch.root, verseIdx: firstMatch.verseIdx, foundCount: foundCount, totalCount: words.length };
     }
 
+    // Convert Arabic numerals to Hebrew letters (gematria) for verse references
+    var HEB_ONES = ['', '\u05D0', '\u05D1', '\u05D2', '\u05D3', '\u05D4', '\u05D5', '\u05D6', '\u05D7', '\u05D8'];
+    var HEB_TENS = ['', '\u05D9', '\u05DB', '\u05DC', '\u05DE', '\u05E0', '\u05E1', '\u05E2', '\u05E4', '\u05E6'];
+    // א ב ג ד ה ו ז ח ט / י כ ל מ נ ס ע פ צ
+    function toHebNum(n) {
+        if (n <= 0) return String(n);
+        if (n >= 1000) return String(n);
+        var result = '';
+        var hundreds = Math.floor(n / 100);
+        var remainder = n % 100;
+        // Hundreds: ק=100 ר=200 ש=300 ת=400 תק=500 תר=600 תש=700 תת=800
+        var hundredLetters = ['', '\u05E7', '\u05E8', '\u05E9', '\u05EA', '\u05EA\u05E7', '\u05EA\u05E8', '\u05EA\u05E9', '\u05EA\u05EA'];
+        if (hundreds > 0 && hundreds <= 8) result += hundredLetters[hundreds];
+        // Special cases: 15=טו, 16=טז (not יה/יו)
+        if (remainder === 15) { result += '\u05D8\u05D5'; }
+        else if (remainder === 16) { result += '\u05D8\u05D6'; }
+        else {
+            var tens = Math.floor(remainder / 10);
+            var ones = remainder % 10;
+            if (tens > 0) result += HEB_TENS[tens];
+            if (ones > 0) result += HEB_ONES[ones];
+        }
+        return result;
+    }
+
+    function hebrewRef(ref) {
+        // "בראשית 1:2" → "בראשית א׳:ב׳"
+        return ref.replace(/(\d+):(\d+)/g, function (m, ch, v) {
+            return toHebNum(parseInt(ch)) + '\u05F3' + ':' + toHebNum(parseInt(v)) + '\u05F3';
+        });
+    }
+
     function getBookFromRef(ref) {
         var match = ref.match(/^(.+?)\s+\d/);
         return match ? match[1] : ref;
@@ -501,8 +533,8 @@ document.addEventListener('DOMContentLoaded', function () {
                                 '<span class="tooltip">' +
                                 '<span class="source-label">\u05DE\u05E7\u05D5\u05E8</span>' +
                                 '<span class="source-section">' + escapeHtml(expSection) + ' \u00B7 ' + escapeHtml(expBookName) + '</span>' +
-                                '<span class="ref">' + escapeHtml(expRef) + '</span>' +
-                                '<a class="freq" href="https://www.sefaria.org/search?q=' + encodeURIComponent(expMatch.root) +
+                                '<span class="ref">' + escapeHtml(hebrewRef(expRef)) + '</span>' +
+                                '<a class="freq" href="https://www.sefaria.org.il/search?q=' + encodeURIComponent(expMatch.root) +
                                 '&tab=text&tvar=1&tsort=relevance" target="_blank" rel="noopener">' +
                                 escapeHtml(formatFreq(expFreq)) + ' \u203A</a>' +
                                 '<hr class="divider">' +
@@ -539,8 +571,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         '<span class="tooltip">' +
                         '<span class="source-label">\u05DE\u05E7\u05D5\u05E8</span>' +
                         '<span class="source-section">' + escapeHtml(section) + ' \u00B7 ' + escapeHtml(bookName) + '</span>' +
-                        '<span class="ref">' + escapeHtml(ref) + '</span>' +
-                        '<a class="freq" href="https://www.sefaria.org/search?q=' +
+                        '<span class="ref">' + escapeHtml(hebrewRef(ref)) + '</span>' +
+                        '<a class="freq" href="https://www.sefaria.org.il/search?q=' +
                         encodeURIComponent(match.root) +
                         '&tab=text&tvar=1&tsort=relevance" target="_blank" rel="noopener">' +
                         escapeHtml(formatFreq(freq)) + ' \u203A</a>';
