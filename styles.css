@@ -87,13 +87,11 @@ body {
     padding: 2.5rem 1rem 1.5rem;
     direction: rtl;
     transition: background-color 0.3s, color 0.3s;
-    overflow-x: hidden;
 }
 
 .container {
     width: 100%;
     max-width: 780px;
-    overflow-x: hidden;
 }
 
 .sr-only {
@@ -443,7 +441,7 @@ textarea::placeholder {
     direction: rtl;
     word-wrap: break-word;
     overflow-wrap: break-word;
-    overflow-x: hidden;
+    overflow: visible;
     transition: background 0.3s;
 }
 
@@ -777,6 +775,7 @@ footer {
 @media (max-width: 600px) {
     body {
         padding: 1rem 0.5rem;
+        overflow-x: hidden;
     }
 
     h1 {
