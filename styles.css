@@ -503,10 +503,11 @@ textarea::placeholder {
 }
 
 .dot {
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
     border-radius: 3px;
     display: inline-block;
+    flex-shrink: 0;
 }
 
 /* Source-specific colors */
@@ -524,11 +525,11 @@ textarea::placeholder {
     margin-inline-end: 2px;
 }
 
-/* Word source indicator — thin left border */
-.word-found.src-torah, .word-prefix.src-torah { border-right: 3px solid #b8860b; }
-.word-found.src-neviim, .word-prefix.src-neviim { border-right: 3px solid #4682b4; }
-.word-found.src-ketuvim, .word-prefix.src-ketuvim { border-right: 3px solid #8b5fa0; }
-.word-found.src-mishnah, .word-prefix.src-mishnah { border-right: 3px solid #2a9d8f; }
+/* Word source indicator — colored top border */
+.word-found.src-torah, .word-prefix.src-torah { border-top: 3px solid #b8860b; }
+.word-found.src-neviim, .word-prefix.src-neviim { border-top: 3px solid #4682b4; }
+.word-found.src-ketuvim, .word-prefix.src-ketuvim { border-top: 3px solid #8b5fa0; }
+.word-found.src-mishnah, .word-prefix.src-mishnah { border-top: 3px solid #2a9d8f; }
 
 .filters-secondary {
     margin-top: -0.6rem;
