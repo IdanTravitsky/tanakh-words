@@ -391,6 +391,15 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!/["'\u05F3\u05F4]/.test(token)) return null;
         var consonants = token.replace(/[^\u05D0-\u05EA]/g, '');
         var expansion = ACRONYMS[consonants];
+        // Try stripping a single-letter prefix (ה, ו, ב, כ, ל, מ, ש) if not found
+        if (!expansion && consonants.length >= 3) {
+            for (var pi = 0; pi < SINGLE_PREFIXES.length; pi++) {
+                if (consonants.indexOf(SINGLE_PREFIXES[pi]) === 0) {
+                    expansion = ACRONYMS[consonants.substring(1)];
+                    if (expansion) break;
+                }
+            }
+        }
         if (!expansion) return null;
 
         var words = expansion.split(' ');
