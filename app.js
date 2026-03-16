@@ -92,6 +92,94 @@ document.addEventListener('DOMContentLoaded', function () {
      '\u05D3\u05D1\u05E8\u05D9 \u05D4\u05D9\u05DE\u05D9\u05DD \u05D1\u05F3'
     ].forEach(function(b) { BOOK_SECTION[b] = '\u05DB\u05EA\u05D5\u05D1\u05D9\u05DD'; });
 
+    // Hebrew acronyms (ראשי תיבות) — stripped form (no quotes) → expansion
+    var ACRONYMS = {
+        // דת ומסורת
+        "\u05EA\u05E0\u05DA": "\u05EA\u05D5\u05E8\u05D4 \u05E0\u05D1\u05D9\u05D0\u05D9\u05DD \u05DB\u05EA\u05D5\u05D1\u05D9\u05DD", // תנך → תורה נביאים כתובים
+        "\u05D4\u05E7\u05D1\u05D4": "\u05D4\u05E7\u05D3\u05D5\u05E9 \u05D1\u05E8\u05D5\u05DA \u05D4\u05D5\u05D0", // הקבה → הקדוש ברוך הוא
+        "\u05D7\u05D6\u05DC": "\u05D7\u05DB\u05DE\u05D9\u05E0\u05D5 \u05D6\u05D9\u05DB\u05E8\u05D5\u05E0\u05DD \u05DC\u05D1\u05E8\u05DB\u05D4", // חזל → חכמינו זיכרונם לברכה
+        "\u05E8\u05E9\u05D9": "\u05E8\u05D1\u05D9 \u05E9\u05DC\u05DE\u05D4 \u05D9\u05E6\u05D7\u05E7\u05D9", // רשי → רבי שלמה יצחקי
+        "\u05E8\u05DE\u05D1\u05DD": "\u05E8\u05D1\u05D9 \u05DE\u05E9\u05D4 \u05D1\u05DF \u05DE\u05D9\u05DE\u05D5\u05DF", // רמבם → רבי משה בן מימון
+        "\u05E8\u05DE\u05D1\u05DF": "\u05E8\u05D1\u05D9 \u05DE\u05E9\u05D4 \u05D1\u05DF \u05E0\u05D7\u05DE\u05DF", // רמבן → רבי משה בן נחמן
+        "\u05D6\u05DC": "\u05D6\u05D9\u05DB\u05E8\u05D5\u05E0\u05D5 \u05DC\u05D1\u05E8\u05DB\u05D4", // זל → זיכרונו לברכה
+        "\u05D6\u05E6\u05DC": "\u05D6\u05DB\u05E8 \u05E6\u05D3\u05D9\u05E7 \u05DC\u05D1\u05E8\u05DB\u05D4", // זצל → זכר צדיק לברכה
+        "\u05E2\u05D4": "\u05E2\u05DC\u05D9\u05D5 \u05D4\u05E9\u05DC\u05D5\u05DD", // עה → עליו השלום
+        "\u05D1\u05D4": "\u05D1\u05E8\u05D5\u05DA \u05D4\u05E9\u05DD", // בה → ברוך השם
+        "\u05D1\u05E2\u05D4": "\u05D1\u05E2\u05D6\u05E8\u05EA \u05D4\u05E9\u05DD", // בעה → בעזרת השם
+        "\u05D1\u05E1\u05D3": "\u05D1\u05E1\u05D9\u05D9\u05E2\u05EA\u05D0 \u05D3\u05E9\u05DE\u05D9\u05D0", // בסד → בסייעתא דשמיא
+        "\u05EA\u05D7": "\u05EA\u05DC\u05DE\u05D9\u05D3 \u05D7\u05DB\u05DD", // תח → תלמיד חכם
+        "\u05E1\u05EA": "\u05E1\u05E4\u05E8 \u05EA\u05D5\u05E8\u05D4", // סת → ספר תורה
+        "\u05E9\u05D5\u05EA": "\u05E9\u05D0\u05DC\u05D5\u05EA \u05D5\u05EA\u05E9\u05D5\u05D1\u05D5\u05EA", // שות → שאלות ותשובות
+        "\u05D2\u05DE\u05D7": "\u05D2\u05DE\u05D9\u05DC\u05D5\u05EA \u05D7\u05E1\u05D3\u05D9\u05DD", // גמח → גמילות חסדים
+        "\u05D1\u05DC\u05E0": "\u05D1\u05DC\u05D9 \u05E0\u05D3\u05E8", // בלנ → בלי נדר
+        "\u05E2\u05D6": "\u05E2\u05D1\u05D5\u05D3\u05D4 \u05D6\u05E8\u05D4", // עז → עבודה זרה
+        "\u05E9\u05E2": "\u05E9\u05D5\u05DC\u05D7\u05DF \u05E2\u05E8\u05D5\u05DA", // שע → שולחן ערוך
+        "\u05E8\u05EA": "\u05E8\u05D0\u05E9\u05D9 \u05EA\u05D9\u05D1\u05D5\u05EA", // רת → ראשי תיבות
+        "\u05DB\u05D2": "\u05DB\u05D4\u05DF \u05D2\u05D3\u05D5\u05DC", // כג → כהן גדול
+        "\u05D1\u05D3": "\u05D1\u05D9\u05EA \u05D3\u05D9\u05DF", // בד → בית דין
+        "\u05E8\u05D4": "\u05E8\u05D0\u05E9 \u05D4\u05E9\u05E0\u05D4", // רה → ראש השנה
+        "\u05D0\u05D3\u05DE\u05D5\u05E8": "\u05D0\u05D3\u05D5\u05E0\u05E0\u05D5 \u05DE\u05D5\u05E8\u05E0\u05D5 \u05D5\u05E8\u05D1\u05E0\u05D5", // אדמור → אדוננו מורנו ורבנו
+        // ביטויים
+        "\u05E2\u05E4": "\u05E2\u05DC \u05E4\u05D9", // עפ → על פי
+        "\u05D1\u05E2\u05E4": "\u05D1\u05E2\u05DC \u05E4\u05D4", // בעפ → בעל פה
+        "\u05D3\u05DB": "\u05D3\u05E8\u05DA \u05DB\u05DC\u05DC", // דכ → דרך כלל
+        "\u05D1\u05D3\u05DB": "\u05D1\u05D3\u05E8\u05DA \u05DB\u05DC\u05DC", // בדכ → בדרך כלל
+        "\u05DB\u05DB": "\u05DB\u05DC \u05DB\u05DA", // כך → כל כך
+        "\u05D0\u05DB": "\u05D0\u05DD \u05DB\u05DA", // אכ → אם כך
+        "\u05E2\u05E9": "\u05E2\u05DC \u05E9\u05DD", // עש → על שם
+        "\u05D3\u05E9": "\u05D3\u05E8\u05D9\u05E9\u05EA \u05E9\u05DC\u05D5\u05DD", // דש → דרישת שלום
+        "\u05DE\u05E6\u05D1": "\u05DE\u05E6\u05D5\u05E8\u05E3 \u05D1\u05D6\u05D4", // מצב → מצורף בזה
+        "\u05D5\u05DB\u05D5": "\u05D5\u05DB\u05D5\u05DC\u05D9", // וכו → וכולי
+        "\u05E1\u05D4\u05DB": "\u05E1\u05DA \u05D4\u05DB\u05DC", // סהכ → סך הכל
+        "\u05E2\u05DE": "\u05E2\u05DE\u05D5\u05D3", // עמ → עמוד
+        "\u05D3\u05D5\u05D7": "\u05D3\u05D9\u05DF \u05D5\u05D7\u05E9\u05D1\u05D5\u05DF", // דוח → דין וחשבון
+        // צבא וביטחון
+        "\u05E6\u05D4\u05DC": "\u05E6\u05D1\u05D0 \u05D4\u05D2\u05E0\u05D4 \u05DC\u05D9\u05E9\u05E8\u05D0\u05DC", // צהל → צבא הגנה לישראל
+        "\u05DE\u05D2\u05D1": "\u05DE\u05E9\u05DE\u05E8 \u05D4\u05D2\u05D1\u05D5\u05DC", // מגב → משמר הגבול
+        "\u05E9\u05D1\u05DB": "\u05E9\u05D9\u05E8\u05D5\u05EA \u05D4\u05D1\u05D9\u05D8\u05D7\u05D5\u05DF \u05D4\u05DB\u05DC\u05DC\u05D9", // שבכ → שירות הביטחון הכללי
+        "\u05E9\u05D1\u05E1": "\u05E9\u05D9\u05E8\u05D5\u05EA \u05D1\u05EA\u05D9 \u05D4\u05E1\u05D5\u05D4\u05E8", // שבס → שירות בתי הסוהר
+        "\u05DE\u05D3\u05D0": "\u05DE\u05D2\u05DF \u05D3\u05D5\u05D3 \u05D0\u05D3\u05D5\u05DD", // מדא → מגן דוד אדום
+        "\u05DE\u05D8\u05DB": "\u05DE\u05D8\u05D4 \u05DB\u05DC\u05DC\u05D9", // מטכ → מטה כללי
+        "\u05D7\u05DB": "\u05D7\u05D1\u05E8 \u05DB\u05E0\u05E1\u05EA", // חכ → חבר כנסת
+        "\u05DE\u05DB": "\u05DE\u05E4\u05E7\u05D3 \u05DB\u05D9\u05EA\u05D4", // מכ → מפקד כיתה
+        "\u05DE\u05E4": "\u05DE\u05E4\u05E7\u05D3 \u05E4\u05DC\u05D5\u05D2\u05D4", // מפ → מפקד פלוגה
+        "\u05D0\u05DC\u05DE": "\u05D0\u05DC\u05D5\u05E3 \u05DE\u05E9\u05E0\u05D4", // אלמ → אלוף משנה
+        "\u05EA\u05D0\u05DC": "\u05EA\u05EA \u05D0\u05DC\u05D5\u05E3", // תאל → תת אלוף
+        "\u05E8\u05E1\u05DF": "\u05E8\u05D1 \u05E1\u05E8\u05DF", // רסן → רב סרן
+        "\u05E8\u05E1\u05DD": "\u05E8\u05D1 \u05E1\u05DE\u05DC", // רסם → רב סמל
+        "\u05E1\u05DE\u05E8": "\u05E1\u05DE\u05DC \u05E8\u05D0\u05E9\u05D5\u05DF", // סמר → סמל ראשון
+        // ממשלה ומשפט
+        "\u05E8\u05D4\u05DE": "\u05E8\u05D0\u05E9 \u05D4\u05DE\u05DE\u05E9\u05DC\u05D4", // רהמ → ראש הממשלה
+        "\u05D9\u05D5\u05E8": "\u05D9\u05D5\u05E9\u05D1 \u05E8\u05D0\u05E9", // יור → יושב ראש
+        "\u05D1\u05D2\u05E5": "\u05D1\u05D9\u05EA \u05DE\u05E9\u05E4\u05D8 \u05D2\u05D1\u05D5\u05D4 \u05DC\u05E6\u05D3\u05E7", // בגץ → בית משפט גבוה לצדק
+        // מקומות
+        "\u05EA\u05D0": "\u05EA\u05DC \u05D0\u05D1\u05D9\u05D1", // תא → תל אביב
+        "\u05E4\u05EA": "\u05E4\u05EA\u05D7 \u05EA\u05E7\u05D5\u05D4", // פת → פתח תקוה
+        "\u05D0\u05E8\u05D4\u05D1": "\u05D0\u05E8\u05E6\u05D5\u05EA \u05D4\u05D1\u05E8\u05D9\u05EA", // ארהב → ארצות הברית
+        "\u05D0\u05D5\u05DD": "\u05D0\u05D5\u05DE\u05D5\u05EA \u05DE\u05D0\u05D5\u05D7\u05D3\u05D5\u05EA", // אום → אומות מאוחדות
+        "\u05D0\u05D9": "\u05D0\u05E8\u05E5 \u05D9\u05E9\u05E8\u05D0\u05DC", // אי → ארץ ישראל
+        "\u05E8\u05D0\u05E9\u05DC\u05E6": "\u05E8\u05D0\u05E9\u05D5\u05DF \u05DC\u05E6\u05D9\u05D5\u05DF", // ראשלצ → ראשון לציון
+        // מקצועות
+        "\u05E2\u05D5\u05D3": "\u05E2\u05D5\u05E8\u05DA \u05D3\u05D9\u05DF", // עוד → עורך דין
+        "\u05E8\u05D5\u05D7": "\u05E8\u05D5\u05D0\u05D4 \u05D7\u05E9\u05D1\u05D5\u05DF", // רוח → רואה חשבון
+        "\u05DE\u05E0\u05DB\u05DC": "\u05DE\u05E0\u05D4\u05DC \u05DB\u05DC\u05DC\u05D9", // מנכל → מנהל כללי
+        "\u05E1\u05DE\u05E0\u05DB\u05DC": "\u05E1\u05D2\u05DF \u05DE\u05E0\u05D4\u05DC \u05DB\u05DC\u05DC\u05D9", // סמנכל → סגן מנהל כללי
+        "\u05D9\u05D7\u05E6": "\u05D9\u05D7\u05E1\u05D9 \u05E6\u05D9\u05D1\u05D5\u05E8", // יחצ → יחסי ציבור
+        "\u05D3\u05E8": "\u05D3\u05D5\u05E7\u05D8\u05D5\u05E8", // דר → דוקטור
+        // יחידות מידה
+        "\u05E7\u05D2": "\u05E7\u05D9\u05DC\u05D5\u05D2\u05E8\u05DD", // קג → קילוגרם
+        "\u05E7\u05DE": "\u05E7\u05D9\u05DC\u05D5\u05DE\u05D8\u05E8", // קמ → קילומטר
+        "\u05E1\u05DE": "\u05E1\u05E0\u05D8\u05D9\u05DE\u05D8\u05E8", // סמ → סנטימטר
+        // אחר
+        "\u05D1\u05D9\u05E1": "\u05D1\u05D9\u05EA \u05E1\u05E4\u05E8", // ביס → בית ספר
+        "\u05E2\u05DE\u05D9": "\u05E2\u05DD \u05D9\u05E9\u05E8\u05D0\u05DC", // עמי → עם ישראל
+        "\u05D1\u05E2\u05DE": "\u05D1\u05E2\u05E8\u05D1\u05D5\u05DF \u05DE\u05D5\u05D2\u05D1\u05DC", // בעמ → בערבון מוגבל
+        "\u05EA\u05D6": "\u05EA\u05E2\u05D5\u05D3\u05EA \u05D6\u05D4\u05D5\u05EA", // תז → תעודת זהות
+        "\u05EA\u05D3": "\u05EA\u05D0 \u05D3\u05D5\u05D0\u05E8", // תד → תא דואר
+        "\u05DE\u05DE\u05D3": "\u05DE\u05E8\u05D7\u05D1 \u05DE\u05D5\u05D2\u05DF \u05D3\u05D9\u05E8\u05EA\u05D9", // ממד → מרחב מוגן דירתי
+        "\u05DE\u05D5\u05E4": "\u05DE\u05D7\u05E7\u05E8 \u05D5\u05E4\u05D9\u05EA\u05D5\u05D7" // מופ → מחקר ופיתוח
+    };
+
     // ===== Initialization =====
 
     // Hide loading indicator if data loaded, or show error after timeout
@@ -347,6 +435,28 @@ document.addEventListener('DOMContentLoaded', function () {
         return null;
     }
 
+    function lookupAcronym(token) {
+        if (typeof TANAKH_dict === 'undefined') return null;
+        // Only check if token contains quote marks
+        if (!/["'\u05F3\u05F4]/.test(token)) return null;
+
+        var consonants = token.replace(/[^\u05D0-\u05EA]/g, '');
+        var expansion = ACRONYMS[consonants];
+        if (!expansion) return null;
+
+        var words = expansion.split(' ');
+        var sectionMask = getSectionMask();
+        var firstMatch = null;
+
+        for (var i = 0; i < words.length; i++) {
+            var m = tryMatch(words[i], sectionMask);
+            if (m && !firstMatch) firstMatch = m;
+        }
+
+        if (!firstMatch) return null;
+        return { expansion: expansion, entry: firstMatch.entry, root: firstMatch.root, verseIdx: firstMatch.verseIdx };
+    }
+
     function getBookFromRef(ref) {
         var match = ref.match(/^(.+?)\s+\d/);
         return match ? match[1] : ref;
@@ -392,6 +502,40 @@ document.addEventListener('DOMContentLoaded', function () {
             if (/^[\u05D0-\u05EA]/.test(token)) {
                 hasHebrew = true;
                 totalWords++;
+
+                // Check acronym first (token has quotes like בע"פ)
+                var acronymMatch = lookupAcronym(token);
+                if (acronymMatch) {
+                    foundWords++;
+                    var aEntry = acronymMatch.entry;
+                    var aVerseData = TANAKH_text[acronymMatch.verseIdx];
+                    var aTabPos = aVerseData.indexOf('\t');
+                    var aRef = aVerseData.substring(0, aTabPos);
+                    var aVerseText = cleanVerseText(aVerseData.substring(aTabPos + 1));
+                    var aBookName = getBookFromRef(aRef);
+                    var aSection = getSectionOfBook(aBookName);
+
+                    var aHighlighted = highlightWordInVerse(aVerseText, acronymMatch.root);
+
+                    var aTooltip =
+                        '<span class="tooltip">' +
+                        '<span class="prefix-note">\u05E8\u05F4\u05EA: ' + escapeHtml(acronymMatch.expansion) + '</span>' +
+                        '<span class="source-label">\u05DE\u05E7\u05D5\u05E8</span>' +
+                        '<span class="source-section">' + escapeHtml(aSection) + ' \u00B7 ' + escapeHtml(aBookName) + '</span>' +
+                        '<span class="ref">' + escapeHtml(aRef) + '</span>' +
+                        '<hr class="divider">' +
+                        '<span class="verse-text">' + aHighlighted + '</span>' +
+                        '</span>';
+
+                    htmlParts.push(
+                        '<span class="word-found">' +
+                        escapeHtml(token) +
+                        aTooltip +
+                        '</span>'
+                    );
+                    continue;
+                }
+
                 var stripped = stripNikkud(token);
                 var match = lookupWord(stripped);
 
