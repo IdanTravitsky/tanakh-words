@@ -354,6 +354,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
+        if (!useVariants) return null;
+
         // Phase 3: Prefix stripping on original word
         for (var i = 0; i < PREFIXES.length; i++) {
             var p = PREFIXES[i];
