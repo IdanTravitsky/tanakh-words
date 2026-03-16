@@ -343,6 +343,29 @@ textarea::placeholder {
     border-color: var(--border-focus);
 }
 
+.action-btn-primary {
+    background: var(--green-bg);
+    border-color: var(--green);
+    color: var(--green);
+}
+
+.action-btn-primary:hover {
+    background: var(--green-bg-hover);
+}
+
+.action-btn-text {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.action-btn-text:hover {
+    color: var(--text-secondary);
+    background: none;
+}
+
 /* ===== Loading ===== */
 .loading {
     text-align: center;
@@ -415,7 +438,7 @@ textarea::placeholder {
     background: var(--card);
     border-radius: 12px;
     box-shadow: var(--shadow);
-    line-height: 2.4;
+    line-height: 2.8;
     font-size: 1.25rem;
     direction: rtl;
     word-wrap: break-word;
@@ -439,11 +462,10 @@ textarea::placeholder {
 
 /* ===== Word highlights ===== */
 .word-found {
-    color: var(--green);
-    font-weight: 600;
+    color: var(--text);
     position: relative;
     cursor: pointer;
-    padding: 1px 4px;
+    padding: 2px 5px;
     border-radius: 4px;
     background: var(--green-bg);
     transition: background 0.15s;
@@ -454,26 +476,42 @@ textarea::placeholder {
 }
 
 .word-prefix {
-    color: var(--prefix-color);
-    font-weight: 600;
+    color: var(--text);
     position: relative;
     cursor: pointer;
-    padding: 1px 4px;
+    padding: 2px 5px;
     border-radius: 4px;
-    background: var(--prefix-bg);
-    border-bottom: 2px dashed var(--prefix-color);
+    background: var(--green-bg);
+    border-bottom: 2px dashed var(--green);
     transition: background 0.15s;
 }
 
 .word-prefix:hover {
-    background: var(--prefix-bg-hover);
+    background: var(--green-bg-hover);
 }
 
 .word-notfound {
-    color: var(--red);
-    padding: 1px 4px;
+    color: var(--text);
+    padding: 2px 5px;
     border-radius: 4px;
     background: var(--red-bg);
+    border-top: 3px solid var(--red);
+}
+
+/* ===== Acronym groups ===== */
+.acronym-group {
+    display: inline;
+    padding: 2px 6px;
+    border: 1px dashed var(--border);
+    border-radius: 6px;
+    position: relative;
+}
+
+.acronym-label {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    vertical-align: super;
+    margin-inline-start: 2px;
 }
 
 /* ===== Tooltips ===== */

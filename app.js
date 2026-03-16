@@ -464,10 +464,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Check acronym — if found, expand inline and process each word
                 var acronymExpansion = lookupAcronym(token);
                 if (acronymExpansion) {
-                    // Replace the acronym token with its expanded words
-                    // Adjust word count: subtract 1 (the acronym) and let each expanded word count individually
                     totalWords--;
                     var expWords = acronymExpansion.expansion.split(' ');
+                    htmlParts.push('<span class="acronym-group"><span class="acronym-label">' + escapeHtml(token) + '</span>');
                     for (var ew = 0; ew < expWords.length; ew++) {
                         if (ew > 0) htmlParts.push(' ');
                         totalWords++;
@@ -489,7 +488,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                             var expTooltip =
                                 '<span class="tooltip">' +
-                                (ew === 0 ? '<span class="prefix-note">\u05E8\u05F4\u05EA: ' + escapeHtml(token) + ' = ' + escapeHtml(acronymExpansion.expansion) + '</span>' : '') +
                                 '<span class="source-label">\u05DE\u05E7\u05D5\u05E8</span>' +
                                 '<span class="source-section">' + escapeHtml(expSection) + ' \u00B7 ' + escapeHtml(expBookName) + '</span>' +
                                 '<span class="ref">' + escapeHtml(expRef) + '</span>' +
@@ -504,6 +502,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             htmlParts.push('<span class="word-notfound">' + escapeHtml(expWords[ew]) + '</span>');
                         }
                     }
+                    htmlParts.push('</span>');
                     continue;
                 }
 
