@@ -312,6 +312,12 @@ textarea::placeholder {
     transition: background 0.3s;
 }
 
+.stat-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 0.3rem;
+}
+
 .stat-main {
     margin-bottom: 0.4rem;
 }
@@ -368,6 +374,15 @@ textarea::placeholder {
 
 .results:empty {
     display: none;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.results:not(:empty) {
+    animation: fadeIn 0.25s ease;
 }
 
 /* ===== Word highlights ===== */
@@ -629,8 +644,8 @@ footer {
 }
 
 .footer-data {
-    color: var(--text-muted);
-    font-size: 0.78rem;
+    color: var(--text-secondary);
+    font-size: 0.82rem;
 }
 
 .footer-data a {

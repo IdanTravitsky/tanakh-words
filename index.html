@@ -63,16 +63,17 @@
 
         <main>
             <label for="input-text" class="sr-only">הקלידו טקסט בעברית לבדיקה</label>
-            <textarea id="input-text" placeholder="...הקלידו טקסט בעברית כאן" rows="5" autofocus></textarea>
+            <textarea id="input-text" placeholder="הדביקו כאן טקסט בעברית כדי לבדוק אילו מילים מופיעות בתנ״ך" rows="5" autofocus></textarea>
 
             <div class="btn-row">
-                <button id="sample-btn" class="action-btn">טקסט לדוגמה</button>
+                <button id="sample-btn" class="action-btn">הכנס טקסט לדוגמה</button>
                 <button id="clear-btn" class="action-btn">נקה</button>
             </div>
 
             <div id="loading" class="loading">טוען נתונים...</div>
 
             <div id="stats" class="stats hidden" aria-live="polite">
+                <div class="stat-label">מילים שנמצאו במקורות</div>
                 <div class="stat-main">
                     <span id="percentage" class="percentage">0</span><span class="percent-sign">%</span>
                 </div>
@@ -80,11 +81,9 @@
                     <div id="progress-fill" class="progress-fill"></div>
                 </div>
                 <div class="stat-detail">
-                    <span id="found-count">0</span> מתוך <span id="total-count">0</span> מילים נמצאו
+                    <span id="found-count">0</span> מתוך <span id="total-count">0</span> מילים
                 </div>
             </div>
-
-            <div id="results" class="results"></div>
 
             <div id="legend" class="legend hidden">
                 <span class="legend-item"><span class="dot dot-torah"></span>תורה</span>
@@ -93,6 +92,8 @@
                 <span class="legend-item"><span class="dot dot-mishnah"></span>משנה</span>
                 <span class="legend-item"><span class="dot notfound-dot"></span>לא נמצא</span>
             </div>
+
+            <div id="results" class="results"></div>
         </main>
 
         <footer>
