@@ -489,7 +489,7 @@ textarea::placeholder {
     font-weight: normal;
     line-height: 1.8;
     width: max-content;
-    max-width: min(450px, 90vw);
+    max-width: min(400px, 85vw);
     z-index: 100;
     transition: opacity 0.2s, visibility 0.2s;
     pointer-events: none;
@@ -582,6 +582,9 @@ textarea::placeholder {
 
 .tooltip .verse-text {
     display: block;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
 }
 
 .tooltip .highlight {
