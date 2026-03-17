@@ -579,7 +579,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     if (match.spelling) {
                         tooltipHtml += '<span class="prefix-note">\u05DB\u05EA\u05D9\u05D1: ' +
-                            escapeHtml(match.spelling) + ' \u2192 ' +
+                            escapeHtml(match.spelling) + ' \u2190 ' +
                             escapeHtml(match.prefix ? match.prefix + match.root : match.root) + '</span>';
                     }
 
